@@ -1,4 +1,24 @@
 <!DOCTYPE html>
+<!-- 
+  =============================================================================
+  PROJEKT STRUKTUR & ARCHITEKTUR
+  =============================================================================
+  Dies ist eine Single Page Application (One-Pager) Portfolio-Website.
+  
+  TECHNOLOGIEN:
+  - HTML5: Semantische Struktur.
+  - CSS3: Custom Styling mit CSS Variablen, Flexbox & Grid Layouts.
+  - JavaScript (Vanilla): Logik für Interaktionen, State Management (Sprache, Audio).
+  - GSAP (GreenSock Animation Platform): Hauptverantwortlich für Scroll-Animationen 
+    (ScrollTrigger), weiche Übergänge und Draggable-Elemente.
+
+  SEKTIONEN:
+  1. Header: Fixierte Navigation, die sich beim Scrollen anpasst.
+  2. Hero: Vollbild-Video-Intro mit Titel und Call-to-Action.
+  3. Stream Section (Horizontal): Horizontales Scrollen für Services & Arbeiten.
+  4. Timeline Section (Horizontal): Horizontale Timeline für den Workflow.
+  5. Magic Cut & Footer: Interaktive Demo und Kontaktbereich.
+-->
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
@@ -13,6 +33,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/EasePack.min.js"></script>
 
   <style>
+    /* ===== CSS VARIABLES (THEMING) ===== */
     :root {
       --bg: #050505;
       --ui-grey: #1c1c1e;
@@ -29,6 +50,7 @@
       --font-logo: 'Montserrat', sans-serif;
     }
 
+    /* ===== RESET & BASE STYLES ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
     
     html, body {
@@ -50,7 +72,7 @@
     .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(255, 255, 255, 0.5); transition: width 0.2s, height 0.2s, background-color 0.2s; }
     body:hover .cursor-outline.hovered { width: 80px; height: 80px; background: rgba(255, 255, 255, 0.1); border-color: transparent; backdrop-filter: blur(2px); }
 
-    /* ===== NAVIGATION ===== */
+    /* ===== HEADER & NAVIGATION ===== */
     .main-header {
       position: fixed; top: 0; left: 0; width: 100%; padding: 20px 40px;
       display: flex; justify-content: space-between; align-items: center; z-index: 1000;
@@ -75,6 +97,15 @@
     .lang-btn { background: none; border: none; color: #aaa; cursor: none; transition: color 0.3s; padding: 0; font-family: var(--font-body); }
     .lang-btn.active { color: #fff; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 4px; }
     .lang-btn:hover { color: var(--accent); }
+
+    .header-cta {
+        padding: 10px 24px; font-size: 0.85rem; 
+        opacity: 0; visibility: hidden; transform: translateY(10px);
+        text-decoration: none; display: inline-block;
+    }
+    .hero-cta {
+        margin-top: 40px; opacity: 0; transform: translateY(20px); text-decoration: none; display: inline-block;
+    }
 
     /* ===== MOBILE MENU OVERLAY ===== */
     .mobile-menu-toggle {
@@ -101,7 +132,7 @@
     }
     .mobile-lang-switch { margin-top: 40px; opacity: 0; transform: translateY(20px); }
 
-    /* ===== VFX LAYERS ===== */
+    /* ===== VFX LAYERS (Grain, Flares) ===== */
     .grain {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       pointer-events: none; z-index: 50; opacity: 0.04;
@@ -121,7 +152,7 @@
       mix-blend-mode: screen; filter: blur(80px);
     }
 
-    /* ===== LOADER ===== */
+    /* ===== PRELOADER ===== */
     .loader {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: #000; z-index: 9999999;
@@ -129,7 +160,7 @@
       font-family: var(--font-title); font-size: 2rem; letter-spacing: 5px; text-transform: uppercase;
     }
 
-    /* ===== INTRO VIDEO WRAPPER ===== */
+    /* ===== INTRO VIDEO OVERLAY ===== */
     .intro-wrapper {
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
         z-index: 9990; overflow: hidden; background: #000;
@@ -138,7 +169,7 @@
     }
     .intro-video { width: 100%; height: 100%; object-fit: cover; }
 
-    /* ===== COOKIE & POPUP OVERLAYS ===== */
+    /* ===== MODALS (Cookies, Details) ===== */
     .overlay-backdrop {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(15px);
@@ -174,7 +205,7 @@
     .btn-secondary { background: transparent; border: 1px solid rgba(255,255,255,0.2); }
     .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
 
-    /* ===== HERO SECTION ===== */
+    /* ===== HERO SECTION (Startbildschirm) ===== */
     .hero {
       min-height: 100vh; display: flex; flex-direction: column;
       justify-content: center; align-items: center; text-align: center;
@@ -199,7 +230,7 @@
     @keyframes textShimmer { to { background-position: 200% center; } }
     .scroll-hint { position: absolute; bottom: 40px; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0; z-index: 10; }
 
-    /* ===== STREAM SECTION (MERGED SERVICES & WORKS) ===== */
+    /* ===== HORIZONTAL STREAM (Services & Work) ===== */
     .stream-section {
         height: 100vh; background: #000; overflow: hidden; display: flex; align-items: center; position: relative; z-index: 85;
     }
@@ -232,7 +263,7 @@
     .stream-desc { font-size: 0.95rem; color: #ccc; line-height: 1.5; }
     .stream-spacer { width: 100px; }
 
-    /* iPhone Frame Styles */
+    /* iPhone Mockup Styles */
     .iphone-wrapper {
         position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
         width: 260px; height: 500px; z-index: 1; pointer-events: none; 
@@ -249,7 +280,7 @@
     }
     .iphone-video { width: 100%; height: 100%; object-fit: cover; }
 
-    /* ===== TIMELINE SECTION ===== */
+    /* ===== TIMELINE SECTION (Workflow) ===== */
     .timeline-section { height: 100vh; background: #0c0c0c; overflow: hidden; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 70; }
     /* GRAB CURSOR */
     .timeline-section:hover { cursor: grab; }
@@ -285,7 +316,7 @@
     .tool-icon { width: 24px; height: 24px; fill: #555; transition: fill 0.3s; }
     .clip-card:hover .tool-icon { fill: var(--accent); }
 
-    /* ===== ABOUT SECTION ===== */
+    /* ===== ABOUT SECTION (Über mich) ===== */
     .about-section { padding: 120px 40px; background: #080808; position: relative; z-index: 68; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; max-width: 1400px; margin: 0 auto; }
     .about-image { border-radius: 20px; overflow: hidden; filter: grayscale(100%); transition: 0.5s; }
     .about-image:hover { filter: grayscale(0%); }
@@ -293,7 +324,7 @@
     .about-text h2 { font-family: var(--font-title); font-size: 3rem; text-transform: uppercase; margin-bottom: 30px; color: #fff; }
     .about-text p { color: #aaa; line-height: 1.8; margin-bottom: 20px; font-size: 1.1rem; }
 
-    /* ===== MAGIC CUT GIMMICK ===== */
+    /* ===== MAGIC CUT (Interaktives Feature) ===== */
     .magic-cut-section { padding: 150px 40px; background: #050505; text-align: center; position: relative; z-index: 65; }
     .magic-cut-header h2 { font-family: var(--font-title); font-size: 3rem; text-transform: uppercase; letter-spacing: 2px; }
     .magic-cut-header p { font-size: 1.1rem; color: #aaa; max-width: 600px; margin: 10px auto 0; }
@@ -311,7 +342,7 @@
     .upload-btn-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; }
     .download-btn { display: none; text-decoration: none; }
 
-    /* ===== FOOTER & SOCIALS ===== */
+    /* ===== FOOTER ===== */
     footer { padding: 100px 40px; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; background: #000; z-index: 60; position: relative; border-top: 1px solid #111; }
     .end-credits { font-family: var(--font-title); font-size: 1.2rem; letter-spacing: 2px; color: #555; margin-bottom: 20px; }
     .contact-big { font-size: 3rem; font-weight: 700; color: #fff; text-decoration: none; transition: color 0.3s; margin-bottom: 40px; display: block; }
@@ -324,7 +355,7 @@
     .newsletter-input { background: var(--ui-grey); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; padding: 12px 20px; color: #fff; width: 250px; outline: none; }
     .newsletter-submit { background: var(--accent); color: #fff; border: none; border-radius: 30px; padding: 12px 25px; cursor: pointer; font-weight: 600; }
 
-    /* ===== UI OVERLAYS ===== */
+    /* ===== UI WIDGETS (Sound & Chat) ===== */
     .sound-toggle { position: fixed; bottom: 30px; left: 30px; z-index: 999999; cursor: pointer; display: flex; align-items: flex-end; gap: 3px; padding: 10px; }
     .bar { width: 4px; background: rgba(255,255,255,0.5); transition: height 0.2s, background 0.3s; }
     .bar:nth-child(1) { height: 10px; } .bar:nth-child(2) { height: 15px; } .bar:nth-child(3) { height: 8px; } .bar:nth-child(4) { height: 12px; }
@@ -349,7 +380,7 @@
     .chat-input { flex: 1; background: transparent; border: none; color: white; font-family: var(--font-body); outline: none; font-size: 0.9rem; }
     .send-btn { background: none; border: none; color: var(--accent); cursor: pointer; font-weight: 600; }
 
-    /* Media Queries - MOBILE OPTIMIZATION (FIXED PEEKING & SIZES) */
+    /* ===== MEDIA QUERIES (Mobile Anpassungen) ===== */
     @media (max-width: 768px) {
         .main-header { padding: 15px 20px; padding-left: 20px; }
         .nav-links, .lang-switch { display: none; } /* Hide default nav */
@@ -404,6 +435,9 @@
         .section-title-card h2 {
             font-size: 2.5rem; /* Reduced from 4rem */
         }
+        
+        .header-cta { display: none; }
+        
         .stream-title {
             font-size: 1.6rem; /* Reduced from 2.5rem */
         }
@@ -453,9 +487,11 @@
 </head>
 <body class="no-scroll">
 
+  <!-- Custom Cursor Elemente -->
   <div class="cursor-dot"></div>
   <div class="cursor-outline"></div>
 
+  <!-- Mobile Navigation Overlay -->
   <div class="mobile-nav-overlay" id="mobileNav">
       <div class="mobile-nav-links">
           <a href="#horizontal-stream" onclick="toggleMobileMenu()">Leistungen & Arbeiten</a>
@@ -469,12 +505,14 @@
       </div>
   </div>
 
+  <!-- Intro Video Wrapper (Optional) -->
   <div class="intro-wrapper" id="introWrapper">
       <video class="intro-video" id="introVideo" muted playsinline>
           <source src="banner_video.mp4" type="video/mp4">
       </video>
   </div>
 
+  <!-- Cookie Consent Popup -->
   <div class="overlay-backdrop" id="cookieOverlay">
       <div class="cookie-box popup-box">
           <div class="cookie-lang-switch">
@@ -491,6 +529,7 @@
       </div>
   </div>
 
+  <!-- Detail Popup für Projekte/Workflow -->
   <div class="overlay-backdrop" id="detailOverlay">
       <div class="popup-box">
           <button class="popup-close" onclick="closeDetailOverlay()">✕</button>
@@ -503,14 +542,17 @@
       </div>
   </div>
 
+  <!-- Hintergrund Audio -->
   <audio id="bg-music" loop>
     <source src="vlog-beat-background-349853.mp3" type="audio/mp3">
   </audio>
 
+  <!-- Haupt-Header -->
   <header class="main-header" id="mainHeader">
     <a href="#" class="logo"><span class="arte-part">ARTE</span><span class="ffingens-part">ffingens</span></a>
     
     <div class="nav-right">
+        <a href="#contact" class="btn header-cta" data-lang="hero_cta">Get in Touch</a>
         <nav class="nav-links">
           <a href="#horizontal-stream" data-lang="nav_services">Leistungen & Arbeiten</a>
           <a href="#about" data-lang="nav_about">Über mich</a>
@@ -530,13 +572,16 @@
     </div>
   </header>
 
+  <!-- Visuelle Effekte (Overlay) -->
   <div class="grain"></div>
   <div class="light-leak"></div>
   <div class="lens-flare-overlay"></div>
 
+  <!-- Lade-Animation -->
   <div class="loader"><span>System Boot...</span></div>
   <div class="sound-toggle" onclick="toggleSound()"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
 
+  <!-- HERO SECTION -->
   <section class="hero">
     <div class="hero-bg-container">
         <video autoplay muted loop playsinline class="hero-video">
@@ -550,10 +595,12 @@
           <span>VISUELLE</span>
           <span class="title-shimmer">MAGIE</span>
         </h1>
+        <a href="#contact" class="btn hero-cta" data-lang="hero_cta">Get in Touch</a>
     </div>
     <div class="scroll-hint" data-lang="scroll_hint">Scroll to Edit</div>
   </section>
 
+  <!-- HORIZONTAL STREAM (Services & Work) -->
   <section id="horizontal-stream" class="stream-section">
       <div class="stream-bg">
           <video class="stream-video-layer active" id="bg-service" autoplay loop muted playsinline>
@@ -565,6 +612,7 @@
           <div class="hero-overlay"></div>
       </div>
 
+      <!-- Container für horizontales Scrollen -->
       <div class="stream-track">
           <div class="section-title-card">
               <h2 data-lang="services_header">Was ich<br>biete</h2>
@@ -664,6 +712,7 @@
       </div>
   </section>
 
+  <!-- TIMELINE SECTION (Workflow) -->
   <section class="timeline-section" id="timeline">
     <div class="playhead-line"></div> 
     <div class="timeline-header"><h2 data-lang="timeline_header">Mein<br>Workflow</h2></div>
@@ -754,6 +803,7 @@
     </div>
   </section>
 
+  <!-- ABOUT SECTION -->
   <section class="about-section" id="about">
       <div class="about-image">
           <img src="https://images.unsplash.com/photo-1552168324-d612d77725e3?q=80&w=1000&auto=format&fit=crop" alt="Director">
@@ -766,6 +816,7 @@
       </div>
   </section>
 
+  <!-- MAGIC CUT SECTION -->
   <section class="magic-cut-section" id="magic-cut">
     <div class="magic-cut-header"><h2 data-lang="magic_title">Magic Cut Gimmick</h2><p data-lang="magic_desc">Laden Sie ein Bild hoch (Simulation).</p></div>
     <div class="magic-cut-container">
@@ -779,6 +830,7 @@
     </div>
   </section>
 
+  <!-- FOOTER -->
   <footer id="contact">
     <div class="end-credits">EXECUTIVE PRODUCER: ARTEFINGENS</div>
     <a href="mailto:contact@artefingens.com" class="contact-big">Let's Shoot.</a>
@@ -792,6 +844,7 @@
     <div style="margin-top: 30px; font-size: 0.8rem; color: #444;"><a href="#" style="color:#666;">Impressum</a></div>
   </footer>
 
+  <!-- CHAT WIDGET -->
   <div class="chat-toggle" onclick="toggleChat()"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"></path></svg></div>
   <div class="chat-window" id="chatWindow">
     <div class="chat-header"><div class="bot-avatar">AF</div><div class="bot-info"><h4>Production Assist</h4><span>Online</span></div></div>
@@ -801,7 +854,7 @@
   </div>
 
   <script>
-    /* CONFIG */
+    /* ===== KONFIGURATION ===== */
     const ENABLE_VIDEO_INTRO = false; 
     const botResponses = [
         "Das klingt spannend! Erzähl mir mehr.",
@@ -811,12 +864,13 @@
         "Lass uns dazu am besten kurz telefonieren."
     ];
 
-    /* TRANSLATIONS */
+    /* ===== ÜBERSETZUNGEN (DE/EN) ===== */
     const translations = {
         de: {
             nav_services: "Leistungen & Arbeiten", nav_work: "Arbeiten", nav_about: "Über mich", nav_contact: "Kontakt", nav_magic: "Magic Cut",
             cookie_title: "Datenschutz", cookie_text: "Wir nutzen Cookies.", cookie_accept: "OK", cookie_decline: "Nein",
             hero_magic: "Magie", scroll_hint: "Scroll to Edit",
+            hero_cta: "Jetzt anfragen",
             services_header: "Was ich biete",
             serv_1_title: "Content Management", serv_1_desc: "Strategische Planung Ihrer Kanäle.",
             serv_2_title: "Content Creation", serv_2_desc: "Authentischer Content für Ihre Zielgruppe.",
@@ -840,6 +894,7 @@
             nav_services: "Services & Work", nav_work: "Work", nav_about: "About", nav_contact: "Contact", nav_magic: "Magic Cut",
             cookie_title: "Privacy", cookie_text: "We use cookies.", cookie_accept: "OK", cookie_decline: "No",
             hero_magic: "Magic", scroll_hint: "Scroll to Edit",
+            hero_cta: "Get in Touch",
             services_header: "Services",
             serv_1_title: "Content Management", serv_1_desc: "Strategic planning for your channels.",
             serv_2_title: "Content Creation", serv_2_desc: "Authentic content for your audience.",
@@ -862,6 +917,7 @@
     };
 
     let currentLang = 'de';
+    // Funktion zum Wechseln der Sprache
     function setLanguage(lang) {
         currentLang = lang;
         document.querySelectorAll('[data-lang]').forEach(el => {
@@ -879,7 +935,7 @@
         if(chatIntro) chatIntro.innerText = translations[lang].chat_intro;
     }
 
-    /* MOBILE MENU */
+    /* ===== MOBILE MENU LOGIK ===== */
     function toggleMobileMenu() {
         const overlay = document.getElementById('mobileNav');
         const toggle = document.querySelector('.mobile-menu-toggle');
@@ -895,7 +951,7 @@
         }
     }
 
-    /* CURSOR */
+    /* ===== CUSTOM CURSOR LOGIK ===== */
     const cursorDot = document.querySelector(".cursor-dot");
     const cursorOutline = document.querySelector(".cursor-outline");
     window.addEventListener("mousemove", (e) => {
@@ -907,7 +963,7 @@
         el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hovered'));
     });
 
-    /* UTILS */
+    /* ===== AUDIO & UTILS ===== */
     const audio = document.getElementById('bg-music'); const soundToggle = document.querySelector('.sound-toggle'); let isPlaying = false; if(audio) audio.volume = 0.15;
     
     document.addEventListener("visibilitychange", () => {
@@ -923,7 +979,7 @@
     function checkCookies() { if (!localStorage.getItem('cookieConsent')) { const overlay = document.getElementById('cookieOverlay'); overlay.style.display = 'flex'; gsap.to(overlay, { opacity: 1, duration: 0.5 }); } }
     window.handleCookieChoice = function(accepted) { localStorage.setItem('cookieConsent', accepted ? 'accepted' : 'declined'); gsap.to('#cookieOverlay', { opacity: 0, duration: 0.5, onComplete: () => document.getElementById('cookieOverlay').style.display = 'none' }); }
 
-    /* POPUP LOGIC */
+    /* ===== POPUP / MODAL LOGIK ===== */
     function openWorkflowDetail(card) {
         const overlay = document.getElementById('detailOverlay');
         const title = card.querySelector('h3').innerText;
@@ -960,7 +1016,7 @@
         gsap.to(overlay, { opacity: 0, duration: 0.3, onComplete: () => overlay.style.display = 'none' });
     }
 
-    /* ANIMATIONS */
+    /* ===== GSAP ANIMATIONEN & SCROLLTRIGGER ===== */
     document.addEventListener("DOMContentLoaded", () => {
         gsap.registerPlugin(ScrollTrigger, EasePack, Draggable);
 
@@ -973,6 +1029,7 @@
             introWrapper.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
         }
 
+        // Loader Sequenz
         const tlLoader = gsap.timeline();
         tlLoader.to(".loader span", { opacity: 0, delay: 0.5, duration: 0.5 }).to(".loader", { height: 0, duration: 0.8, ease: "power4.inOut", onComplete: () => {
             checkCookies();
@@ -994,16 +1051,28 @@
             });
         }
 
+        // Start-Animationen für Hero-Section
         function startPageAnimations() {
             gsap.to(".light-leak", { opacity: 0.8, duration: 0.1, repeat: 7, yoyo: true, ease: "rough({ strength: 1, points: 20, randomize: true})", onComplete: () => { gsap.to(".light-leak", { opacity: 0, duration: 2 }); } });
-            gsap.timeline({ delay: 0.2 }).to(".hero-eyebrow", { opacity: 1, duration: 1 }).to(".hero-title span", { y: 0, stagger: 0.2, duration: 1.2, ease: "power3.out" }, "-=0.5").to(".scroll-hint", { opacity: 1, duration: 1 }, "-=0.5");
+            gsap.timeline({ delay: 0.2 })
+                .to(".hero-eyebrow", { opacity: 1, duration: 1 })
+                .to(".hero-title span", { y: 0, stagger: 0.2, duration: 1.2, ease: "power3.out" }, "-=0.5")
+                .to(".hero-cta", { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, "-=0.8")
+                .to(".scroll-hint", { opacity: 1, duration: 1 }, "-=0.5");
+
+            // Button-Transition: Hero -> Header
+            ScrollTrigger.create({
+                trigger: ".hero-cta", start: "bottom top+=100",
+                onEnter: () => gsap.to(".header-cta", { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out" }),
+                onLeaveBack: () => gsap.to(".header-cta", { autoAlpha: 0, y: 10, duration: 0.4, ease: "power2.in" })
+            });
 
             // --- HORIZONTAL STREAM LOGIC ---
             const streamTrack = document.querySelector(".stream-track");
             
-            // MOBILE CHECK (ScrollTrigger MatchMedia)
+            // RESPONSIVE ANIMATIONEN (ScrollTrigger MatchMedia)
             ScrollTrigger.matchMedia({
-                // Desktop
+                // Desktop: Horizontales Scrollen via GSAP Pinning
                 "(min-width: 769px)": function() {
                     if(streamTrack) {
                         const bgService = document.getElementById("bg-service");
@@ -1031,7 +1100,7 @@
                             }
                         });
                         
-                        // DRAGGABLE PROXY (Desktop Only)
+                        // DRAGGABLE PROXY (Erlaubt Drag-to-Scroll auf Desktop)
                         const proxy = document.createElement("div");
                         Draggable.create(proxy, {
                             trigger: ".stream-section", 
@@ -1041,7 +1110,7 @@
                         });
                     }
 
-                    // Timeline Horizontal Scroll (Fixed)
+                    // Timeline Horizontal Scroll
                     const tracksContainer = document.querySelector(".tracks-container");
                     if(tracksContainer) {
                         const timecodeEl = document.querySelector('.playhead-timecode');
@@ -1082,7 +1151,7 @@
                     }
                 },
                 
-                // Mobile
+                // Mobile: Natives horizontales Scrollen (CSS snap)
                 "(max-width: 768px)": function() {
                     // No GSAP Pinning on Mobile - Let CSS handle horizontal scroll
                 }
@@ -1090,7 +1159,7 @@
         }
     });
     
-    // Magic Cut & Chat
+    // Magic Cut & Chat Interaktionen
     document.getElementById('image-upload').addEventListener('change', (e) => { if(e.target.files[0]) { document.getElementById('original-image').src = URL.createObjectURL(e.target.files[0]); document.getElementById('process-btn').classList.remove('disabled'); } });
     document.getElementById('process-btn').addEventListener('click', async () => { 
         document.querySelector('.loader-spinner').style.display = 'block'; 
